@@ -27,7 +27,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 // MVC
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+var app = builder.Build(); 
+var invariant = System.Globalization.CultureInfo.InvariantCulture;
+System.Globalization.CultureInfo.DefaultThreadCurrentCulture = invariant;
+System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = invariant;
 
 using (var scope = app.Services.CreateScope())
 {
@@ -42,6 +45,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<UserManager<ApplicationUser>>();
 
     await AdminSeeder.SeedAdminAsync(userManager);
+    await StaffSeeder.SeedStaffAsync(userManager);
 }
 // HTTP request pipeline
 if (!app.Environment.IsDevelopment())
